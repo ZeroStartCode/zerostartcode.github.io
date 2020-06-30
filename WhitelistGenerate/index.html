@@ -93,7 +93,7 @@
             top:3px
         }
 
-        #langText{ 
+        #langText, #TypeText{ 
             color: #fff;
             font-size: 16px;
             font-weight: bold;
@@ -178,7 +178,9 @@
         iframe {
             width: 900px;
             height: 300px;
+            color: #000;
         }
+        
     </style>
 </head>
 <body onload="lang_change()">
@@ -197,10 +199,24 @@
          
          <div id='msg' style="background-color: darkred;border-radius: 5px;"></div>
 
+         <p id ="TypeText"></p>
+         <div class="dropdown-container">
+            <select name="type" id="type" onchange="type_change();">
+                <option value="control">控制台(Control)</option>
+                <option value="game">遊戲(Game)</option>
+            </select>
+            <div class="select-icon">
+                <svg focusable="false" viewBox="0 0 104 128" width="25" height="35" class="icon">
+                    <path d="m2e1 95a9 9 0 0 1 -9 9 9 9 0 0 1 -9 -9 9 9 0 0 1 9 -9 9 9 0 0 1 9 9zm0-3e1a9 9 0 0 1 -9 9 9 9 0 0 1 -9 -9 9 9 0 0 1 9 -9 9 9 0 0 1 9 9zm0-3e1a9 9 0 0 1 -9 9 9 9 0 0 1 -9 -9 9 9 0 0 1 9 -9 9 9 0 0 1 9 9zm14 55h68v1e1h-68zm0-3e1h68v1e1h-68zm0-3e1h68v1e1h-68z"></path>
+                </svg>
+            </div>
+        </div>
 
         <h2><a href="https://steamid.io/">SteamID I/O</a></h2>
         <iframe src="https://steamid.io/"></iframe>
+
         <p id ="langText"></p>
+
         <div class="dropdown-container">
             <select name="lang" id="lang" onchange="lang_change();">
                 　<option value="TChinese">中文(Traditional Chinese)</option>
@@ -221,6 +237,8 @@
             var MsgRemove = ''
             var MsgError = ''
             var MsgCopy = ''
+            var GenerateFormatAdd = ''
+            var GenerateFormatRemove = ''
             function Generate(x) {
                 
                 const Steam = document.getElementById("steam");
@@ -231,20 +249,22 @@
                         var SteamRepl = Steam.value.replace(/[\ |\~|\`|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)|\-|\_|\ |\=|\||\\|\[|\]|\{|\}|\;|\:|\”|\’|\,|\<|\.|\>|\/|\?]/g,"");
                         var SteamReplText = SteamRepl.match(/\d+/);
                         
-                        Text.value = 'rconaddwl steam:'+ SteamReplText;
+                        Text.value = GenerateFormatAdd + 'steam:'+ SteamReplText;
                         Msg.innerHTML= MsgAdd;
 
                     } else if (x == 'remove') { 
                         if (Steam.value.indexOf('https://steamcommunity.com/profiles/') != -1 || Steam.value.indexOf('765611') != -1) {
                             var SteamRepl = Steam.value.replace(/[\ |\~|\`|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)|\-|\_|\ |\=|\||\\|\[|\]|\{|\}|\;|\:|\”|\’|\,|\<|\.|\>|\/|\?]/g,"");
                             var SteamReplText = SteamRepl.match(/\d+/);
-                            Text.value = 'rconremovewl steam:'+ hex(SteamReplText);
+                            Text.value = GenerateFormatRemove + 'steam:'+ hex(SteamReplText);
                             Msg.innerHTML= MsgRemove;
                         } else if (Steam.value.indexOf('steam:') != -1 ) {
-                                Text.value = 'rconremovewl '+Steam.value;
+                                Text.value = GenerateFormatRemove + Steam.value;
                                 Msg.innerHTML= MsgRemove;
                         } 
                     }
+                    setTimeout("cp()",500)  
+                    
                     Steam.value = '';
                 } else {
                     Msg.innerHTML= MsgError;
@@ -268,6 +288,18 @@
                 return hex.join('')
             }
 
+            function type_change() {
+                var TyepChange = document.getElementById("type")
+
+               if (TyepChange.value == 'game') {
+                    GenerateFormatAdd = '/addwl '
+                    GenerateFormatRemove = '/removewl '
+               } else {
+                    GenerateFormatAdd = 'rconaddwl '
+                    GenerateFormatRemove = 'rconremovewl '
+                }
+
+            }
 
             function lang_change() {
                 var LangChange = document.getElementById("lang")
@@ -276,8 +308,10 @@
                 var LangCp = document.getElementById("cp")
                 var LangSteam = document.getElementById("steam")
                 var LangText = document.getElementById("langText")
+                var TypeText = document.getElementById("TypeText")
                 var H1Title = document.getElementById("h1_title")
                 var github = document.getElementById("github")
+                
                 var LangChangeValue = LangChange.value
 
 
@@ -287,27 +321,31 @@
                     LangCp.innerHTML = 'Copy'
                     LangSteam.placeholder = 'Steam Code 765611/steam:110000/SteamUrl "profiles/XXX"'
                     LangText.innerHTML    = 'Language'
-                    H1Title.innerHTML  = 'Generate Whitelist Command'
+                    H1Title.innerHTML  = 'Generate Whitelist Command (PS:0.5s AutoCopy)'
+                    TypeText.innerHTML    = 'Generate Command Format'
                     github.innerHTML = 'FiveM Script GitHub DRP_WHITELIST'
                     MsgAdd      = 'Successfully Generated Add Command!'
                     MsgRemove   = 'Successfully Generated Remove Command!'
                     MsgError    = 'Error Text Format!'
                     MsgCopy     = 'Successfully Copy!'
+                    
                 } else {
                     LangAdd.innerHTML = '新增'
                     LangRemove.innerHTML = '刪除'
                     LangCp.innerHTML = '複製'
                     LangSteam.placeholder = '請貼上 Steam 碼 765611/steam:110000/Steam個人連結 "profiles/XXX"'
                     LangText.innerHTML    = '語言'
-                    H1Title.innerHTML  = '生成白名單指令'
+                    H1Title.innerHTML  = '生成白名單指令 (PS:生成後 0.5s 自動複製)'
+                    TypeText.innerHTML    = '生成指令格式'
                     github.innerHTML = 'FiveM 腳本 GitHub DRP_WHITELIST'
                     MsgAdd      = '成功生成新增指令!'
                     MsgRemove   = '成功生成刪除指令!'
                     MsgError    = '錯誤的文字格式!'
                     MsgCopy     = '成功複製!'
                 }
-            }
 
+                type_change();
+            }
 
             function cp() {
                 var copy=document.getElementById("text");
