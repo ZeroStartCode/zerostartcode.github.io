@@ -94,12 +94,13 @@
         }
 
         #langText, #TypeText{ 
+            
             color: #fff;
             font-size: 16px;
             font-weight: bold;
-            padding: 0;
-            margin: 5px;
-
+            padding: 5px 0;
+            margin: 0;
+            text-align: center;
         }
 
         .dropdown-container {
@@ -167,6 +168,10 @@
             margin: 20px 0px;
             font-size: 32px;
         }
+        h2 {
+            margin: 0;
+            padding: 5px 0;
+        }
         h2 a{
             color: #fff;
             text-decoration:none;
@@ -174,43 +179,50 @@
         h2 a:hover{
             color: red;
             text-decoration:none;
+            
         }
         iframe {
             width: 900px;
             height: 300px;
             color: #000;
         }
-        
+        .checkbox {
+            color: #fff;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body onload="lang_change()">
     <div class="main">
         <h1 id='h1_title' class="animate__animated animate__rotateIn"></h1>
-        <div style="display: inline-block;">
-            <input  id="steam" type="text" value ='' placeholder ='' />
-            <input id="text" type="text" value='rconaddwl steam:'/>
-         </div>
-     
-         <div class="btn">
-             <button class="button" style="vertical-align:middle" type="button" onclick="Generate('add')"><span id='add'> </span></button>
-             <button class="button" style="vertical-align:middle" type="button" onclick="Generate('remove')"><span id='remove'> </span></button>
-             <button class="button" style="vertical-align:middle" type="button" onClick="cp()"><span id='cp'> </span></button>
-         </div>
-         
-         <div id='msg' style="background-color: darkred;border-radius: 5px;"></div>
 
-         <p id ="TypeText"></p>
-         <div class="dropdown-container">
+        <div class="dropdown-container">
+            <p id ="TypeText"></p>
             <select name="type" id="type" onchange="type_change();">
                 <option value="control">控制台(Control)</option>
                 <option value="game">遊戲(Game)</option>
             </select>
-            <div class="select-icon">
-                <svg focusable="false" viewBox="0 0 104 128" width="25" height="35" class="icon">
-                    <path d="m2e1 95a9 9 0 0 1 -9 9 9 9 0 0 1 -9 -9 9 9 0 0 1 9 -9 9 9 0 0 1 9 9zm0-3e1a9 9 0 0 1 -9 9 9 9 0 0 1 -9 -9 9 9 0 0 1 9 -9 9 9 0 0 1 9 9zm0-3e1a9 9 0 0 1 -9 9 9 9 0 0 1 -9 -9 9 9 0 0 1 9 -9 9 9 0 0 1 9 9zm14 55h68v1e1h-68zm0-3e1h68v1e1h-68zm0-3e1h68v1e1h-68z"></path>
-                </svg>
+            <div class="checkbox" style="display: inline-block;">
+                <input type="checkbox" id="AutoCopyCheck" name="AutoCopy" value="Bike">
+                <label for="AutoCopy" id='AutoCopyText'></label>
             </div>
         </div>
+
+
+        <div style="display: inline-block;">
+            <input  id="steam" type="text" value ='' placeholder ='' />
+            <input id="text" type="text" value='rconaddwl steam:'/>
+        </div>
+        <div class="btn">
+            <button class="button" style="vertical-align:middle" type="button" onclick="Generate('add')"><span id='add'> </span></button>
+            <button class="button" style="vertical-align:middle" type="button" onclick="Generate('remove')"><span id='remove'> </span></button>
+            <button class="button" style="vertical-align:middle" type="button" onClick="cp()"><span id='cp'> </span></button>
+        </div>
+         
+        <div id='msg' style="background-color: darkred;border-radius: 5px;"></div>
+         
+        
+
 
         <h2><a href="https://steamid.io/">SteamID I/O</a></h2>
         <iframe src="https://steamid.io/"></iframe>
@@ -222,11 +234,6 @@
                 　<option value="TChinese">中文(Traditional Chinese)</option>
                 　<option value="English">英文(English)</option>
             </select>
-            <div class="select-icon">
-                <svg focusable="false" viewBox="0 0 104 128" width="25" height="35" class="icon">
-                    <path d="m2e1 95a9 9 0 0 1 -9 9 9 9 0 0 1 -9 -9 9 9 0 0 1 9 -9 9 9 0 0 1 9 9zm0-3e1a9 9 0 0 1 -9 9 9 9 0 0 1 -9 -9 9 9 0 0 1 9 -9 9 9 0 0 1 9 9zm0-3e1a9 9 0 0 1 -9 9 9 9 0 0 1 -9 -9 9 9 0 0 1 9 -9 9 9 0 0 1 9 9zm14 55h68v1e1h-68zm0-3e1h68v1e1h-68zm0-3e1h68v1e1h-68z"></path>
-                </svg>
-            </div>
         </div>
         <h2><a id="github" href="https://github.com/benzon/DRP_WHITELIST"></a></h2>
         
@@ -244,6 +251,8 @@
                 const Steam = document.getElementById("steam");
                 const Text = document.getElementById("text");
                 const Msg = document.getElementById('msg');
+                const CheckBox = document.getElementById('AutoCopyCheck');
+
                 if (Steam.value != '') {
                     if (x == 'add') {
                         var SteamRepl = Steam.value.replace(/[\ |\~|\`|\!|\@|\#|\$|\%|\^|\&|\*|\(|\)|\-|\_|\ |\=|\||\\|\[|\]|\{|\}|\;|\:|\”|\’|\,|\<|\.|\>|\/|\?]/g,"");
@@ -263,8 +272,10 @@
                                 Msg.innerHTML= MsgRemove;
                         } 
                     }
-
-                    setTimeout("cp()",300)  
+                    
+                    if (CheckBox.checked == true) {
+                        setTimeout("cp()",300)  
+                    }
                     Steam.value = '';
                 } else {
                     Msg.innerHTML= MsgError;
@@ -310,6 +321,7 @@
                 var LangText = document.getElementById("langText")
                 var TypeText = document.getElementById("TypeText")
                 var H1Title = document.getElementById("h1_title")
+                var LangCheckBox = document.getElementById("AutoCopyText")
                 var github = document.getElementById("github")
                 
                 var LangChangeValue = LangChange.value
@@ -323,6 +335,7 @@
                     LangText.innerHTML    = 'Language'
                     H1Title.innerHTML  = 'Generate Whitelist Command (PS:0.3s AutoCopy)'
                     TypeText.innerHTML    = 'Generate Command Format'
+                    LangCheckBox.innerHTML = 'Enable Auto Copy'
                     github.innerHTML = 'FiveM Script GitHub DRP_WHITELIST'
                     MsgAdd      = 'Successfully Generated Add Command!'
                     MsgRemove   = 'Successfully Generated Remove Command!'
@@ -335,6 +348,7 @@
                     LangCp.innerHTML = '複製'
                     LangSteam.placeholder = '請貼上 Steam 碼 765611/steam:110000/Steam個人連結 "profiles/XXX"'
                     LangText.innerHTML    = '語言'
+                    LangCheckBox.innerHTML = '開啟自動複製'
                     H1Title.innerHTML  = '生成白名單指令 (PS:生成後 0.3s 自動複製)'
                     TypeText.innerHTML    = '生成指令格式'
                     github.innerHTML = 'FiveM 腳本 GitHub DRP_WHITELIST'
