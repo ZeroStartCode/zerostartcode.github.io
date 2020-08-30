@@ -30,3 +30,13 @@ body {
     height: 50%;
     width: 50%;
 }
+
+.discord-link {
+	text-decoration:none;
+	font-family: 'Microsoft JhengHei';
+	font-weight: bold;
+	color: #3F7ADA;
+}
+.discord-link:hover {
+	color: #E37C7C;
+}
